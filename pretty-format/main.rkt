@@ -22,14 +22,23 @@
   [(define (write-proc this out mode)
      (apply fprintf out (formatted-fmt this) (formatted-vs this)))])
 
+(define (pretty-print/no-newline v out)
+  (define old-line-hook (pretty-print-print-line))
+  (parameterize ([pretty-print-print-line
+                  (λ (line out prev-len dest-col)
+                    (if line
+                        (old-line-hook line out prev-len dest-col)
+                        0))])
+    (pretty-print v out)))
+
 (define (pretty-fprintf out fmt . vs)
-  (pretty-print (formatted fmt vs) out))
+  (pretty-print/no-newline (formatted fmt vs) out))
 
 (define (pretty-printf fmt . vs)
-  (pretty-print (formatted fmt vs)))
+  (pretty-print/no-newline (formatted fmt vs)))
 
 (define (pretty-eprintf fmt . vs)
-  (pretty-print (formatted fmt vs) (current-error-port)))
+  (pretty-print/no-newline (formatted fmt vs) (current-error-port)))
 
 (define (pretty-format fmt . vs)
   (pretty-string (formatted fmt vs)))
@@ -66,6 +75,5 @@ x = '(define (f n)
        (for/list
         ((i (in-range n)) #:when (odd? i))
         (* 2 i)))
-
 """
                   )))
