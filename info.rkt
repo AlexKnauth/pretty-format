@@ -3,7 +3,7 @@
 (define collection 'multi)
 
 (define deps
-  '("base"
+  '(["base" #:version "6.0.1"]
     "typed-racket-lib"
     ))
 
