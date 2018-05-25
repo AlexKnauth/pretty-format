@@ -35,7 +35,7 @@
   (pretty-print/no-newline (formatted fmt vs) out))
 
 (define (pretty-printf fmt . vs)
-  (pretty-print/no-newline (formatted fmt vs)))
+  (pretty-print/no-newline (formatted fmt vs) (current-output-port)))
 
 (define (pretty-eprintf fmt . vs)
   (pretty-print/no-newline (formatted fmt vs) (current-error-port)))
